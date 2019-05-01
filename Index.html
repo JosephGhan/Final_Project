@@ -11,62 +11,47 @@
 <body>
     <div id="app">
         <div class="d-flex p-2 bd-highlight" style="justify-content: center;">
-            {{movies.results[0].title}}
+                <div v-for="i in numMovies" class="card" style="width: 18rem;">
+                    <img v-bind:src="getImage(i)" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">{{moviesObject.results[i-1].title}}</h5>
+                        <div class="btn-group">
+                            <a href="#" class="btn btn-primary">Buy Child Ticket</a>
+                            <a href="#" class="btn btn-secondary">But Adult Ticket</a>
+                        </div>
+                        <p class="card-text">{{moviesObject.results[i-1].overview}}</p>
+                        
+                    </div>
+                   </div>
         </div>
     </div>
 
 
     <script>
-        
-
-        
-
-        // Vue.component('card', {
-        //     props: ['img', 'name', 'info'],
-        //     template: `<div class="card" style="width: 18rem;">
-        //                 <img v-bind:src="img" class="card-img-top" alt="...">
-        //                 <div class="card-body">
-        //                     <h5 class="card-title">{{name}}</h5>
-        //                     <p class="card-text">{{info}}</p>
-        //                 </div>
-        //                </div>`
-        // })
         var app = new Vue({
             el: "#app",
             data: {
-                movies: ""
+                moviesObject: "",
+                numMovies: 3
             },
             methods: {
                 request: function(){
                     if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-                        //alert("800!");
                     var jsObject = JSON.parse(httpRequest.responseText);
-                   
-                    this.movies = jsObject
-                    
+                    this.moviesObject = jsObject
                     }
+                },
+                getImage(i){
+                    return "https://image.tmdb.org/t/p/w500" + this.moviesObject.results[i-1].poster_path
                 }
             }
         })
-
         var httpRequest = new XMLHttpRequest();
                 httpRequest.open("get", "https://api.themoviedb.org/3/movie/now_playing?api_key=d35e6f1bf8c1c544c9a27fedf739fa6d&language=en-US&page=1");
                 httpRequest.send();
 
                 httpRequest.onreadystatechange  = app.request;
-
-                
-                
-                //console.log(jsObject);
-                
-                // for (let i = 0; i < 3; i++) {
-                //     document.getElementById('movies').innerHTML +='<card name="' + jsObject.results[i].title + '" img="' + jsObject.results[i].poster_path + '" info="' + jsObject.results[i].overview + '" ></card>';
-                //     console.log(jsObject.results[i].poster_path)
-                // }        
-              
-            
-        
-        
+                   
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
