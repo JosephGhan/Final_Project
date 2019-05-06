@@ -16,7 +16,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{moviesObject.results[i-1].title}}</h5>
                         <div class="btn-group">
-                            <a href="#" class="btn btn-primary">Buy Child Ticket</a>
+                            <a v-on:click="addChild(i)" href="#" class="btn btn-primary">Buy Child Ticket</a>
                             <a v-on:click="addAdult(i)" href="#" class="btn btn-secondary">Buy Adult Ticket</a>
                         </div>
                         <p class="card-text">{{moviesObject.results[i-1].overview}}</p>
@@ -25,100 +25,31 @@
                 </div>
         </div>
 
-        <div v-if="seen" class="d-flex p-2 bd-highlight" style="justify-content: center;">
-            <div class="container">
-                <div class="row" style="justify-content: center;">
-                    <div class="col-sm-12 col-md-10 col-md-offset-1">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Movie</th>
-                                    <th>Adult Ticket</th>
-                                    <th class="text-center">Child Ticket</th>
-                                    <th class="text-center">Total</th>
-                                    <th> </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="col-sm-8 col-md-6">
-                                    <div class="media">
-                                        <a class="thumbnail pull-left" href="#"> <img class="media-object" src="" style="width: 72px; height: 72px;"> </a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"></h4>
-                                            
-                                        </div>
-                                    </div></td>
-                                    <td class="col-sm-1 col-md-1" style="text-align: center">
-                                    <input type="email" class="form-control" id="exampleInputEmail1" value="1">
-                                    </td>
-                                    <td class="col-sm-1 col-md-1 text-center"><strong></strong></td>
-                                    <td class="col-sm-1 col-md-1 text-center"><strong></strong></td>
-                                    <td class="col-sm-1 col-md-1">
-                                    <button type="button" class="btn btn-danger">
-                                        <span class="glyphicon glyphicon-remove"></span> Remove
-                                    </button></td>
-                                </tr>
-                                <tr>
-                                    <td class="col-md-6">
-                                    <div class="media">
-                                        <a class="thumbnail pull-left" href="#"> <img class="media-object" src="" style="width: 72px; height: 72px;"> </a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading"><a href="#"></a></h4>
-                                            <h5 class="media-heading"> by <a href="#">Brand name</a></h5>
-                                        </div>
-                                    </div></td>
-                                    <td class="col-md-1" style="text-align: center">
-                                    <input type="email" class="form-control" id="exampleInputEmail1" value="1">
-                                    </td>
-                                    <td class="col-md-1 text-center">
-                                            <input type="email" class="form-control" id="exampleInputEmail1" value="1">
-                                    </td>
-                                    <td class="col-md-1 text-center"><strong></strong></td>
-                                    <td class="col-md-1">
-                                    <button type="button" class="btn btn-danger">
-                                        <span class="glyphicon glyphicon-remove"></span> Remove
-                                    </button></td>
-                                </tr>
-                                <tr>
-                                    <td>   </td>
-                                    <td>   </td>
-                                    <td>   </td>
-                                    <td><h5>Subtotal</h5></td>
-                                    <td class="text-right"><h5><strong></strong></h5></td>
-                                </tr>
-                                <tr>
-                                    <td>   </td>
-                                    <td>   </td>
-                                    <td>   </td>
-                                    <td><h5>Tax</h5></td>
-                                    <td class="text-right"><h5><strong>$6.94</strong></h5></td>
-                                </tr>
-                                <tr>
-                                    <td>   </td>
-                                    <td>   </td>
-                                    <td>   </td>
-                                    <td><h3>Total</h3></td>
-                                    <td class="text-right"><h3><strong>$31.53</strong></h3></td>
-                                </tr>
-                                <tr>
-                                    <td>   </td>
-                                    <td>   </td>
-                                    <td>   </td>
-                                    <td>
-                                    
-                                    <td>
-                                    <button type="button" class="btn btn-success">
-                                        Checkout <span class="glyphicon glyphicon-play"></span>
-                                    </button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+        <div v-if="seen" class="d-flex p-2 bd-highlight mx-auto" style="width: 80%;">
+            <table class="table" >
+                <thead>
+                  <tr>
+                    <th scope="col">Movie</th>
+                    <th scope="col">Adult Tickets</th>
+                    <th scope="col">Child Tickets</th>
+                    <th scope="col">Total</th>
+                    <th scope="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="i in moviesCnt">
+                    <th scope="row">{{moviesObject.results[moviesPurch[i-1]].title}}</th>
+                    <td>{{adultTickets[moviesPurch[i-1]]}}</td>
+                    <td>{{childtickets[i - 1]}}</td>
+                    <td>{{total[i]}}</td>
+                    <td>
+                        <div class="btn-group">
+                        <a href="#" class="btn btn-primary">Remove</a></div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
         </div>
-    </div>
 
 
     <script>
@@ -128,7 +59,12 @@
                 moviesObject: "",
                 numMovies: 3,
                 seen: false,
-                i: 0
+                moviesCnt: 0,
+                moviesPurch: [],
+                adultTickets: [0,0,0,0,0],
+                childtickets: [0,0,0,0,0],
+                total: [],
+                y: 0
             },
             methods: {
                 request: function(){
@@ -141,11 +77,33 @@
                     return "https://image.tmdb.org/t/p/w500" + this.moviesObject.results[i-1].poster_path
                 },
                 addAdult(i){
-                    this.seen = true
-
+                    this.seen = true;
+                    
+                    if (this.moviesPurch.length > 0) {
+                        for(let x = 0; x < (this.moviesPurch.length); x++){
+                            if((i - 1) == this.moviesPurch[x]){
+                                console.log(x);
+                                this.adultTickets[x] += 1;
+                                console.log(this.adultTickets[x]);
+                            } else {
+                                this.moviesCnt++;
+                                this.moviesPurch[this.y] = (i - 1);
+                                this.adultTickets[this.y] += 1;
+                                console.log(this.moviesCnt + " " + this.moviesPurch[this.y] + " " + this.adultTickets[this.y]);
+                                this.y++;
+                                x += 10000;
+                            }
+                        }
+                    } else {
+                        this.moviesCnt++;
+                        this.moviesPurch[this.y] = (i -1);
+                        this.adultTickets[this.y] += 1;
+                        console.log(this.moviesCnt + " " + this.moviesPurch[this.y] + " " + this.adultTickets[this.y]);
+                        this.y++;
+                    }
                 },
                 addChild(i){
-                    this.seen = true
+                    this.seen = true;
 
                 }
             }
