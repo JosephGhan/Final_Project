@@ -17,7 +17,7 @@
                         <h5 class="card-title">{{moviesObject.results[i-1].title}}</h5>
                         <div class="btn-group">
                             <a href="#" class="btn btn-primary">Buy Child Ticket</a>
-                            <a href="#" class="btn btn-secondary">But Adult Ticket</a>
+                            <a v-on:click="addAdult(i)" href="#" class="btn btn-secondary">Buy Adult Ticket</a>
                         </div>
                         <p class="card-text">{{moviesObject.results[i-1].overview}}</p>
                         
@@ -33,8 +33,8 @@
                             <thead>
                                 <tr>
                                     <th>Movie</th>
-                                    <th>Tickets</th>
-                                    <th class="text-center">Price</th>
+                                    <th>Adult Ticket</th>
+                                    <th class="text-center">Child Ticket</th>
                                     <th class="text-center">Total</th>
                                     <th> </th>
                                 </tr>
@@ -127,7 +127,8 @@
             data: {
                 moviesObject: "",
                 numMovies: 3,
-                seen: true
+                seen: false,
+                i: 0
             },
             methods: {
                 request: function(){
@@ -138,6 +139,14 @@
                 },
                 getImage(i){
                     return "https://image.tmdb.org/t/p/w500" + this.moviesObject.results[i-1].poster_path
+                },
+                addAdult(i){
+                    this.seen = true
+
+                },
+                addChild(i){
+                    this.seen = true
+
                 }
             }
         })
