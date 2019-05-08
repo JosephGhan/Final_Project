@@ -39,8 +39,8 @@
                 <tbody>
                   <tr v-for="i in moviesCnt">
                     <th scope="row">{{moviesObject.results[moviesPurch[i-1]].title}}</th>
-                    <td>{{adultTickets[moviesPurch[i-1]]}}</td>
-                    <td>{{childtickets[i - 1]}}</td>
+                    <td>{{adultTickets[adultTickets[i-1]]}}</td>
+                    <td>{{childtickets[i]}}</td>
                     <td>{{total[i]}}</td>
                     <td>
                         <div class="btn-group">
@@ -60,9 +60,9 @@
                 numMovies: 3,
                 seen: false,
                 moviesCnt: 0,
-                moviesPurch: [],
-                adultTickets: [0,0,0,0,0],
-                childtickets: [0,0,0,0,0],
+                moviesPurch: [0],
+                adultTickets: [0],
+                childtickets: [0],
                 total: [],
                 y: 0
             },
@@ -78,29 +78,20 @@
                 },
                 addAdult(i){
                     this.seen = true;
-                    
-                    if (this.moviesPurch.length > 0) {
-                        for(let x = 0; x < (this.moviesPurch.length); x++){
-                            if((i - 1) == this.moviesPurch[x]){
-                                console.log(x);
-                                this.adultTickets[x] += 1;
-                                console.log(this.adultTickets[x]);
-                            } else {
-                                this.moviesCnt++;
-                                this.moviesPurch[this.y] = (i - 1);
-                                this.adultTickets[this.y] += 1;
-                                console.log(this.moviesCnt + " " + this.moviesPurch[this.y] + " " + this.adultTickets[this.y]);
-                                this.y++;
-                                x += 10000;
-                            }
+                    this.moviesPurch[this.y] = 0;
+                    for (let x = 0; x < this.moviesPurch.length; x++){
+                        if (i == this.moviesPurch[x]){
+                            this.adultTickets[x] += 1;
+                            console.log("if");
+                        } else {
+                            this.moviesCnt += 1;
+                            this.moviesPurch[x] = (i - 1);
+                            this.adultTickets[x] += 1;
+                            console.log(this.moviesCnt + " " + x);
+                            x = 1000;
                         }
-                    } else {
-                        this.moviesCnt++;
-                        this.moviesPurch[this.y] = (i -1);
-                        this.adultTickets[this.y] += 1;
-                        console.log(this.moviesCnt + " " + this.moviesPurch[this.y] + " " + this.adultTickets[this.y]);
-                        this.y++;
                     }
+                    this.y++;
                 },
                 addChild(i){
                     this.seen = true;
