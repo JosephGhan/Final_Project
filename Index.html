@@ -17,7 +17,7 @@
                         <h5 class="card-title">{{moviesObject.results[i-1].title}}</h5>
                         <div class="btn-group">
                             <a v-on:click="addChild(i)" href="#" class="btn btn-primary">Buy Child Ticket</a>
-                            <a v-on:click="addAdult(i)" href="#" class="btn btn-secondary">Buy Adult Ticket</a>
+                            <a v-on:click="addAdult(moviesObject.results[i-1].title)" href="#" class="btn btn-secondary">Buy Adult Ticket</a>
                         </div>
                         <p class="card-text">{{moviesObject.results[i-1].overview}}</p>
                         
@@ -38,8 +38,8 @@
                 </thead>
                 <tbody>
                   <tr v-for="i in moviesCnt">
-                    <th scope="row">{{moviesObject.results[moviesPurch[i-1]].title}}</th>
-                    <td>{{adultTickets[adultTickets[i-1]]}}</td>
+                    <th scope="row">{{moviesPurch[i-1]}}</th>
+                    <td>{{adultTickets[i - 1]}}</td>
                     <td>{{childtickets[i]}}</td>
                     <td>{{total[i]}}</td>
                     <td>
@@ -60,10 +60,11 @@
                 numMovies: 3,
                 seen: false,
                 moviesCnt: 0,
-                moviesPurch: [0],
+                moviesPurch: [],
                 adultTickets: [0],
                 childtickets: [0],
                 total: [],
+                cont: false,
                 y: 0
             },
             methods: {
@@ -76,22 +77,41 @@
                 getImage(i){
                     return "https://image.tmdb.org/t/p/w500" + this.moviesObject.results[i-1].poster_path
                 },
-                addAdult(i){
+                addAdult(name){
                     this.seen = true;
-                    this.moviesPurch[this.y] = 0;
-                    for (let x = 0; x < this.moviesPurch.length; x++){
-                        if (i == this.moviesPurch[x]){
-                            this.adultTickets[x] += 1;
-                            console.log("if");
-                        } else {
-                            this.moviesCnt += 1;
-                            this.moviesPurch[x] = (i - 1);
-                            this.adultTickets[x] += 1;
-                            console.log(this.moviesCnt + " " + x);
-                            x = 1000;
+                    //this.moviesPurch[this.y] = "";
+                    if (this.moviesPurch.length > 0) {
+                        for (let x = 0; x < this.moviesPurch.length; x++) {
+                            if(name == this.moviesPurch[x]) {
+                                console.log(x)
+                                this.adultTickets[x] += 1;
+                                console.log(this.adultTickets);                               
+                                let hold = this.moviesCnt;
+                                this.moviesCnt = 0;
+                                this.moviesCnt = hold;
+                                this.cont = true;
+                            }
                         }
+                        if (this.cont == false) {
+                            this.adultTickets[this.y] = 0;
+                            this.moviesCnt++;
+                            this.moviesPurch[this.y] = name;
+                            this.adultTickets[this.y] += 1;
+                            console.log("added next movie");
+                            this.y++;
+                        }
+                    this.cont = false;
+                    } else {
+                        this.moviesCnt++;
+                        this.moviesPurch[0] = name;
+                        this.adultTickets[0] += 1;
+                        console.log("added first movie");
+                        this.y++;
                     }
-                    this.y++;
+
+
+
+                    
                 },
                 addChild(i){
                     this.seen = true;
