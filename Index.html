@@ -44,7 +44,7 @@
                     <td>{{ticketTotal[i - 1]}}</td>
                     <td>
                         <div class="btn-group">
-                        <a href="#" class="btn btn-primary">Remove</a></div>
+                        <a v-on:click="removeMovie(i-1)"href="#" class="btn btn-primary">Remove</a></div>
                     </td>
                   </tr>
                   <tr>
@@ -194,6 +194,18 @@
                         childTotal = 0;
                         this.subtotal += this.ticketTotal[i];
                     }
+                },
+                removeMovie(i) {
+                    this.moviesPurch.splice(i, 1);
+                    this.adultTickets.splice(i, 1);
+                    this.childTickets.splice(i, 1);
+                    this.ticketTotal.splice(i, 1);
+                    this.moviesCnt--;
+                    this.count--;
+                    if (this.moviesCnt == 0) {
+                        this.seen = false;
+                    }
+                    this.findTotal();
                 }
             }
         })
