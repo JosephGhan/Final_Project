@@ -30,8 +30,8 @@
                 <thead>
                   <tr>
                     <th scope="col">Movie</th>
-                    <th scope="col">Adult Tickets</th>
-                    <th scope="col">Child Tickets</th>
+                    <th scope="col">Adult Tickets ${{adultPrice}}</th>
+                    <th scope="col">Child Tickets ${{childPrice}}</th>
                     <th scope="col">Total</th>
                     <th scope="col"></th>
                   </tr>
@@ -39,14 +39,38 @@
                 <tbody>
                   <tr v-for="i in moviesCnt">
                     <th scope="row">{{moviesPurch[i-1]}}</th>
-                    <td>{{adultTickets[i - 1]}}</td>
-                    <td>{{childTickets[i - 1]}}</td>
-                    <td>{{total[i]}}</td>
+                    <td><p>{{adultTickets[i - 1]}}</p></td>
+                    <td><p>{{childTickets[i - 1]}}</p></td>
+                    <td>{{ticketTotal[i - 1]}}</td>
                     <td>
                         <div class="btn-group">
                         <a href="#" class="btn btn-primary">Remove</a></div>
                     </td>
                   </tr>
+                  <tr>
+                      <td></td>
+                      <td></td>
+                      <td>Adult Subtotal: </td>
+                      <td>
+                        {{adultSubtotal}}
+                      </td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Child Subtotal: </td>
+                    <td>
+                      {{childSubtotal}}
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>Subtotal: </td>
+                    <td>
+                      {{subtotal}}
+                    </td>
+                </tr>
                 </tbody>
               </table>
         </div>
@@ -61,12 +85,17 @@
                 seen: false,
                 moviesCnt: 0,
                 moviesPurch: [],
-                adultTickets: [0],
-                childTickets: [0],
-                total: [],
+                adultTickets: [],
+                childTickets: [],
+                ticketTotal: [],
                 cont: false,
-                y: 0,
-                z: 0
+                count: 0,
+                adultPrice: 7.99,
+                childPrice: 4.99,
+                adultSubtotal: 0,
+                childSubtotal: 0,
+                subtotal: 0
+
             },
             methods: {
                 request: function(){
@@ -83,9 +112,10 @@
                     if (this.moviesPurch.length > 0) {
                         for (let x = 0; x < this.moviesPurch.length; x++) {
                             if(name == this.moviesPurch[x]) {
-                                console.log(x)
-                                this.adultTickets[x] += 1;
-                                console.log(this.adultTickets);                               
+                                if(this.adultTickets[x] === undefined) {
+                                    this.adultTickets[x] = 0;
+                                }
+                                this.adultTickets[x] += 1;                             
                                 let hold = this.moviesCnt;
                                 this.moviesCnt = 0;
                                 this.moviesCnt = hold;
@@ -93,31 +123,31 @@
                             }
                         }
                         if (this.cont == false) {
-                            this.adultTickets[this.y] = 0;
+                            this.adultTickets[this.count] = 0;
                             this.moviesCnt++;
-                            this.moviesPurch[this.y] = name;
-                            this.adultTickets[this.y] += 1;
-                            console.log("added next movie");
-                            this.y++;
+                            this.moviesPurch[this.count] = name;
+                            this.adultTickets[this.count] += 1;
+                            this.count++;
                         }
                     this.cont = false;
                     } else {
+                        this.adultTickets[0] = 0;
                         this.moviesCnt++;
                         this.moviesPurch[0] = name;
                         this.adultTickets[0] += 1;
-                        console.log("added first movie");
-                        this.y++;
+                        this.count++;
                     }
-                    
+                    this.findTotal();
                 },
                 addChild(name){
                     this.seen = true;
                     if (this.moviesPurch.length > 0) {
                         for (let x = 0; x < this.moviesPurch.length; x++) {
                             if(name == this.moviesPurch[x]) {
-                                console.log(x)
-                                this.childTickets[x] += 1;
-                                console.log(this.childTickets);                               
+                                if(this.childTickets[x] === undefined) {
+                                    this.childTickets[x] = 0;
+                                }
+                                this.childTickets[x] += 1;                              
                                 let hold = this.moviesCnt;
                                 this.moviesCnt = 0;
                                 this.moviesCnt = hold;
@@ -125,20 +155,44 @@
                             }
                         }
                         if (this.cont == false) {
-                            this.childTickets[this.z] = 0;
+                            this.childTickets[this.count] = 0;
                             this.moviesCnt++;
-                            this.moviesPurch[this.z] = name;
-                            this.childTickets[this.z] += 1;
-                            console.log("added next movie");
-                            this.z++;
+                            this.moviesPurch[this.count] = name;
+                            this.childTickets[this.count] += 1;
+                            this.count++;
                         }
                     this.cont = false;
                     } else {
+                        this.childTickets[0] = 0;
                         this.moviesCnt++;
                         this.moviesPurch[0] = name;
                         this.childTickets[0] += 1;
-                        console.log("added first movie");
-                        this.z++;
+                        this.count++;
+                    }
+                    this.findTotal();
+                },
+                findTotal() {
+                    let adultTotal = 0;
+                    let childTotal = 0;
+                    this.subtotal = 0;
+                    this.adultSubtotal = 0;
+                    this.childSubtotal = 0;
+                    for(let i = 0; i < this.moviesPurch.length; i++) {
+                        if(this.ticketTotal[i] === undefined) {
+                            this.ticketTotal[i] = 0;
+                        }
+                        if (this.adultTickets[i] !== undefined) {
+                            adultTotal = (this.adultTickets[i] * this.adultPrice);
+                        }
+                        if (this.childTickets[i] !== undefined) {
+                            childTotal = (this.childTickets[i] * this.childPrice);
+                        }
+                        this.ticketTotal[i] = adultTotal + childTotal;
+                        this.adultSubtotal += adultTotal;
+                        this.childSubtotal += childTotal;
+                        adultTotal = 0;
+                        childTotal = 0;
+                        this.subtotal += this.ticketTotal[i];
                     }
                 }
             }
