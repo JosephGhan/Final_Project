@@ -39,8 +39,8 @@
                 <tbody>
                   <tr v-for="i in moviesCnt">
                     <th scope="row">{{moviesPurch[i-1]}}</th>
-                    <td><p>{{adultTickets[i - 1]}}</p></td>
-                    <td><p>{{childTickets[i - 1]}}</p></td>
+                    <td><p v-if="show1[i-1]">{{adultTickets[i - 1]}} <button v-on:click="minusAdult(i-1)" type="button" class="btn btn-primary btn-sm">-</button></p></td>
+                    <td><p v-if="show2[i-1]">{{childTickets[i - 1]}} <button v-on:click="minusChild(i-1)"type="button" class="btn btn-primary btn-sm">-</button></p></td>
                     <td>{{ticketTotal[i - 1]}}</td>
                     <td>
                         <div class="btn-group">
@@ -94,8 +94,9 @@
                 childPrice: 4.99,
                 adultSubtotal: 0,
                 childSubtotal: 0,
-                subtotal: 0
-
+                subtotal: 0,
+                show1: [false, false, false],
+                show2: [false, false, false]
             },
             methods: {
                 request: function(){
@@ -125,6 +126,7 @@
                         if (this.cont == false) {
                             this.adultTickets[this.count] = 0;
                             this.moviesCnt++;
+                            this.show1[this.count] = false;
                             this.moviesPurch[this.count] = name;
                             this.adultTickets[this.count] += 1;
                             this.count++;
@@ -133,11 +135,13 @@
                     } else {
                         this.adultTickets[0] = 0;
                         this.moviesCnt++;
+                        this.show1[0] = false;
                         this.moviesPurch[0] = name;
                         this.adultTickets[0] += 1;
                         this.count++;
                     }
                     this.findTotal();
+                    this.findIsTrue();
                 },
                 addChild(name){
                     this.seen = true;
@@ -157,6 +161,7 @@
                         if (this.cont == false) {
                             this.childTickets[this.count] = 0;
                             this.moviesCnt++;
+                            this.show2[this.count] = false;
                             this.moviesPurch[this.count] = name;
                             this.childTickets[this.count] += 1;
                             this.count++;
@@ -165,11 +170,13 @@
                     } else {
                         this.childTickets[0] = 0;
                         this.moviesCnt++;
+                        this.show2[0] = false;
                         this.moviesPurch[0] = name;
                         this.childTickets[0] += 1;
                         this.count++;
                     }
                     this.findTotal();
+                    this.findIsTrue();
                 },
                 findTotal() {
                     let adultTotal = 0;
@@ -193,6 +200,7 @@
                         adultTotal = 0;
                         childTotal = 0;
                         this.subtotal += this.ticketTotal[i];
+                        this.findIsTrue();
                     }
                 },
                 removeMovie(i) {
@@ -206,6 +214,42 @@
                         this.seen = false;
                     }
                     this.findTotal();
+                },
+                findIsTrue() {
+                    for (let i = 0; i < this.show1.length; i++) {
+                        if (this.adultTickets[i] > 0) {
+                            this.show1[i] = true;
+                            //console.log("made " + i + " " + this.show1[i]);
+                        } else {
+                            this.show1[i] = false;
+                        }
+                    }
+
+                    for (let i = 0; i < this.show2.length; i++) {
+                        if (this.childTickets[i] > 0) {
+                            this.show2[i] = true;
+                            //console.log("made " + i + " " + this.show2[i]);
+                        } else {
+                            this.show2[i] = false;
+                        }
+                    }
+                    
+                    for (let i = 0; i < this.moviesCnt; i++) {
+                        if (!this.show1[i] && !this.show2[i]) {
+                            console.log("removed");
+                            this.removeMovie(i);
+                        }
+                    }
+                },
+                minusAdult(i) {
+                    this.adultTickets[i] -= 1;
+                    this.findIsTrue();
+                    this.findTotal();
+                },
+                minusChild(i) {
+                    this.childTickets[i] -= 1;
+                    this.findTotal();
+                    this.findIsTrue();
                 }
             }
         })
