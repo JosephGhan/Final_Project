@@ -117,11 +117,16 @@ var app = new Vue({
                     childTotal = (this.childTickets[i] * this.childPrice);
                 }
                 this.ticketTotal[i] = adultTotal + childTotal;
+                
                 this.adultSubtotal += adultTotal;
+                this.adultSubtotal = this.adultSubtotal.toFixed(2);
                 this.childSubtotal += childTotal;
+                this.childSubtotal = this.childSubtotal.toFixed(2);
                 adultTotal = 0;
                 childTotal = 0;
                 this.subtotal += this.ticketTotal[i];
+                this.ticketTotal[i] = this.ticketTotal[i].toFixed(2);
+                this.subtotal = this.subtotal.toFixed(2);
                 this.findIsTrue();
             }
         },
