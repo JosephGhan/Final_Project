@@ -17,7 +17,8 @@ var app = new Vue({
         childSubtotal: 0,
         subtotal: 0,
         show1: [false],
-        show2: [false]
+        show2: [false],
+        showTotals: [false, false]
     },
     methods: {
         request: function(){
@@ -169,6 +170,18 @@ var app = new Vue({
                 if (!this.show1[i] && !this.show2[i]) {
                     this.removeMovie(i);
                 }
+            }
+
+            if (this.adultSubtotal > 0) {
+                this.showTotals[0] = true;
+            } else {
+                this.showTotals[0] = false;
+            }
+
+            if (this.childSubtotal > 0) {
+                this.showTotals[1] = true;
+            } else {
+                this.showTotals[1] = false;
             }
         },
         minusAdult(i) {
