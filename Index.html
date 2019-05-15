@@ -23,8 +23,8 @@
                     <div class="card-body">
                         <h5 class="card-title">{{moviesObject.results[i-1].title}}</h5>
                         <div class="btn-group">
-                            <a v-on:click="addChild(moviesObject.results[i-1].title)" href="#" class="btn btn-primary">Buy Child Ticket</a>
-                            <a v-on:click="addAdult(moviesObject.results[i-1].title)" href="#" class="btn btn-secondary">Buy Adult Ticket</a>
+                            <a v-on:click="addChild(moviesObject.results[i-1].title)" class="btn btn-primary" style="color: white;">Buy Child Ticket</a>
+                            <a v-on:click="addAdult(moviesObject.results[i-1].title)" class="btn btn-secondary" style="color: white;">Buy Adult Ticket</a>
                         </div>
                         <p class="card-text">{{moviesObject.results[i-1].overview}}</p>
                         
@@ -51,7 +51,7 @@
                     <td>{{ticketTotal[i - 1]}}</td>
                     <td>
                         <div class="btn-group">
-                        <a v-on:click="removeMovie(i-1)"href="#" class="btn btn-primary">Remove</a></div>
+                        <a v-on:click="removeMovie(i-1)" class="btn btn-primary" style="color: white;">Remove</a></div>
                     </td>
                   </tr>
                   <tr v-if="showTotals[0]">
