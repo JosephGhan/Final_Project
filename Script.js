@@ -2,7 +2,7 @@ var app = new Vue({
     el: "#app",
     data: {
         moviesObject: "",
-        numMovies: 3,
+        numMovies: 5,
         seen: false,
         moviesCnt: 0,
         moviesPurch: [],
@@ -35,7 +35,7 @@ var app = new Vue({
             if (this.moviesPurch.length > 0) {
                 for (let x = 0; x < this.moviesPurch.length; x++) {
                     if(name == this.moviesPurch[x]) {
-                        if(this.adultTickets[x] === undefined) {
+                        if(this.adultTickets[x] == undefined) {
                             this.adultTickets[x] = 0;
                         }
                         this.adultTickets[x] += 1;                             
@@ -117,16 +117,11 @@ var app = new Vue({
                     childTotal = (this.childTickets[i] * this.childPrice);
                 }
                 this.ticketTotal[i] = adultTotal + childTotal;
-                
                 this.adultSubtotal += adultTotal;
-                this.adultSubtotal = this.adultSubtotal.toFixed(2);
                 this.childSubtotal += childTotal;
-                this.childSubtotal = this.childSubtotal.toFixed(2);
                 adultTotal = 0;
                 childTotal = 0;
                 this.subtotal += this.ticketTotal[i];
-                this.ticketTotal[i] = this.ticketTotal[i].toFixed(2);
-                this.subtotal = this.subtotal.toFixed(2);
                 this.findIsTrue();
             }
         },
